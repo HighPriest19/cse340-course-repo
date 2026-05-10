@@ -1,10 +1,13 @@
 ﻿<%- include('partials/header', { title: title }) %>
     <h1>Organizations</h1>
     <p>Here are some local organizations supporting service projects:</p>
-    <ul>
-        <li>Habitat for Humanity</li>
-        <li>Red Cross</li>
-        <li>Local Food Bank</li>
-        <li>Community Outreach Center</li>
-    </ul>
-<%- include('partials/footer') %>
+    <div class="organizations-container">
+        <% organizations.forEach(org => { %>
+            <div class="organization-card">
+                <img src="<%= org.image %>" alt="<%= org.name %>">
+                <h2><%= org.name %></h2>
+                <p><%= org.description %></p>
+            </div>
+        <% }) %>
+    </div>
+<%- include('partials/footer', { year: year }) %>
