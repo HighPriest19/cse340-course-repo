@@ -3,16 +3,14 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 const app = express()
-const port = process.env.PORT || 3000
+const port = process.env.PORT || 5500
+const host = process.env.HOST || 'localhost'
 
 // Set view engine to EJS
 app.set("view engine", "ejs")
 
 // Serve static files (CSS/Images) from the public folder
 app.use(express.static("public"))
-
-// Serve images from the images folder
-app.use("/images", express.static("images"))
 
 /* ***********************
  * Routes
@@ -44,6 +42,5 @@ app.get("/categories", async (req, res) => {
 })
 
 app.listen(port, () => {
-  console.log(`App listening on http://localhost:${port}`)
+  console.log(`App listening at http://${host}:${port}`)
 })
-
