@@ -1,16 +1,20 @@
 import express from 'express'
 import dotenv from 'dotenv'
+import { getAllCategories } from './src/models/categories.js'
+
 dotenv.config()
 
 const app = express()
-const port = process.env.PORT || 5500
-const host = process.env.HOST || 'localhost'
+const port = process.env.PORT || 3000
 
 // Set view engine to EJS
 app.set("view engine", "ejs")
 
 // Serve static files (CSS/Images) from the public folder
 app.use(express.static("public"))
+
+// Serve images from the images folder
+app.use("/images", express.static("images"))
 
 /* ***********************
  * Routes
@@ -38,9 +42,10 @@ app.get("/projects", async (req, res) => {
 
 // Categories Page (REQUIRED for Assignment)
 app.get("/categories", async (req, res) => {
-  res.render("categories", { title: "Categories", year: new Date().getFullYear() })
+  const categories = await getAllCategories()
+  res.render("categories", { title: "Categories", categories: categories, year: new Date().getFullYear() })
 })
 
 app.listen(port, () => {
-  console.log(`App listening at http://${host}:${port}`)
+  console.log(`App listening on http://localhost:${port}`)
 })
