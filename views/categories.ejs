@@ -2,9 +2,8 @@
     <h1>Service Categories</h1>
     <p>Explore the different types of service projects available:</p>
     <ul>
-        <li>Environmental</li>
-        <li>Educational</li>
-        <li>Community Service</li>
-        <li>Health and Wellness</li>
+        <% categories.forEach(category => { %>
+            <li><a href="/category/<%= category.id %>"><%= category.name %></a></li>
+        <% }) %>
     </ul>
 <%- include('partials/footer', { year: year }) %>

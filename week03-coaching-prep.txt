@@ -1,0 +1,177 @@
+Week 03 Coaching Session Prep - Model-View-Controller
+CSE 340
+
+Important note:
+This is a preparation file with answers and code snippets from my Week 3 project. It is not a fake coaching-session transcript. I can use this during the coaching session, then save the real conversation transcript for Canvas.
+
+My project summary:
+For Week 3, I updated my Service Project Portal to use the Model-View-Controller pattern. I added model files for database queries, controller files for request logic, route files for Express routes, and EJS views for the user interface. The app now supports organizations, organization detail pages, projects, project detail pages, categories, category detail pages, category tags, and 404/500 error pages.
+
+Topic 1: Models
+
+Code snippet from src/models/categories.js:
+
+async function getProjectsByCategoryId(categoryId) {
+  const result = await pool.query(
+    `SELECT projects.id, projects.name, projects.description, organizations.name AS organization_name
+     FROM projects
+     INNER JOIN project_categories
+       ON projects.id = project_categories.project_id
+     INNER JOIN organizations
+       ON projects.organization_id = organizations.id
+     WHERE project_categories.category_id = $1
+     ORDER BY projects.name ASC`,
+    [categoryId]
+  )
+  return result.rows
+}
+
+What this code does:
+This model function accepts a categoryId parameter and uses it in a parameterized SQL query. It finds all service projects connected to that category through the project_categories junction table. It also joins to the organizations table so the category detail page can show which organization is connected to each project.
+
+Why I used this approach:
+I kept the SQL inside the model because the model layer is responsible for database access. The controller does not directly query the database. I also used $1 and [categoryId] instead of putting the value directly into the SQL string. That is safer because it helps prevent SQL injection.
+
+Key MVC idea:
+The model handles data. In this project, the model functions retrieve categories, projects, and organizations from PostgreSQL and return rows to the controller.
+
+Topic 2: Views
+
+Code snippet from views/categories.ejs:
+
+<ul class="link-list">
+    <% categories.forEach(category => { %>
+        <li><a href="/category/<%= category.id %>"><%= category.name %></a></li>
+    <% }) %>
+</ul>
+
+Code snippet from views/project-detail.ejs:
+
+<div class="tag-list">
+    <% categories.forEach(category => { %>
+        <a class="tag" href="/category/<%= category.id %>"><%= category.name %></a>
+    <% }) %>
+</div>
+
+What this code does:
+The categories view loops through the categories array and creates a link for each category. The link uses the category id in the URL, so clicking a category takes the user to /category/[id]. The project detail view does something similar for category tags. Each tag links to the matching category detail page.
+
+Why I used this approach:
+The view should focus on displaying data that was already prepared by the controller. EJS lets me combine HTML with small pieces of dynamic data, like category.id and category.name. This keeps the page dynamic without putting database logic into the view.
+
+Key MVC idea:
+The view handles presentation. It should not decide how to query data. It receives arrays and objects from the controller and turns them into HTML.
+
+Topic 3: Controllers
+
+Code snippet from src/controllers/categoriesController.js:
+
+async function buildCategoryDetail(req, res, next) {
+  const category = await getCategoryById(req.params.id)
+
+  if (!category) {
+    return next()
+  }
+
+  const projects = await getProjectsByCategoryId(req.params.id)
+  return res.render('category-detail', {
+    title: category.name,
+    category,
+    projects,
+    year: new Date().getFullYear()
+  })
+}
+
+Related route from src/routes/categoriesRoute.js:
+
+router.get('/category/:id', asyncHandler(buildCategoryDetail))
+
+What this code does:
+The route /category/:id captures the category id from the URL. The controller reads that value with req.params.id. It asks the model for the category and for all projects in that category. Then it renders the category-detail EJS view and passes the data to the page.
+
+Why I used this approach:
+The controller is the middle layer between routes, models, and views. It does not contain raw SQL. It coordinates the request by calling model functions and choosing which view to render. If the category is not found, it calls next(), which lets the app continue to the 404 handler.
+
+Key MVC idea:
+The controller handles request flow. It receives the request, gets the needed data from models, and sends the data to views.
+
+Topic 4: Error Handling
+
+Code snippet from src/utilities/asyncHandler.js:
+
+function asyncHandler(callback) {
+  return function handleAsync(req, res, next) {
+    Promise.resolve(callback(req, res, next)).catch(next)
+  }
+}
+
+export default asyncHandler
+
+Code snippet from server.js:
+
+app.use((req, res) => {
+  res.status(404).render("404", {
+    title: "Page Not Found",
+    year: new Date().getFullYear()
+  })
+})
+
+app.use((err, req, res, next) => {
+  console.error(err)
+  res.status(500).render("500", {
+    title: "Server Error",
+    year: new Date().getFullYear()
+  })
+})
+
+What this code does:
+The asyncHandler wrapper catches errors from async controller functions and passes them to Express with next(). The 404 handler runs when no route matches or when a controller calls next() because a record was not found. The 500 handler runs when something unexpected goes wrong, such as a database error.
+
+Why I used this approach:
+Without asyncHandler, an error in an async route could be missed or could crash the request flow. This pattern keeps the route files clean and sends errors to one central 500 page. The 404 and 500 views give the user a professional response instead of a broken page or raw error message.
+
+Key MVC idea:
+Error handling is part of the application flow. Controllers can call next() for missing resources, and unexpected errors are handled centrally by Express middleware.
+
+Additional details I can mention:
+
+1. The server.js file now registers route modules instead of defining all routes directly:
+
+app.use(homeRoute)
+app.use(organizationsRoute)
+app.use(projectsRoute)
+app.use(categoriesRoute)
+
+2. The database connection is configured in src/database/index.js and uses the DATABASE_URL environment variable.
+
+3. I added npm run setup-db, which runs src/database/setup.js and applies src/setup.sql to create the Week 3 tables and sample data.
+
+4. The required routes were tested successfully:
+/ = 200
+/organizations = 200
+/organization/1 = 200
+/projects = 200
+/project/1 = 200
+/categories = 200
+/category/1 = 200
+/not-a-real-page = 404
+
+Short answers I can use in the coaching session:
+
+What is MVC?
+MVC stands for Model-View-Controller. The model works with the database, the view displays HTML to the user, and the controller connects the request to the correct model and view.
+
+Why use route parameters?
+Route parameters let one route handle many detail pages. For example, /category/:id can handle /category/1, /category/2, and so on.
+
+Why use a junction table?
+Projects and categories have a many-to-many relationship. One project can have many categories, and one category can belong to many projects. The project_categories table connects them.
+
+Why use parameterized SQL?
+Parameterized SQL keeps user-provided values separate from the SQL command. That makes the query safer and helps prevent SQL injection.
+
+What was one challenge?
+One issue was that the database connection needed environment variables to load before the PostgreSQL pool was created. The fix was to load dotenv in the database module so DATABASE_URL is available when the pool is initialized.
+
+What did I learn?
+I learned how to separate responsibilities in a server-side app. Instead of putting everything in server.js, the app is now divided into models, controllers, routes, views, and utilities.

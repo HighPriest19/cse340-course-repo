@@ -1,0 +1,15 @@
+<%- include('partials/header') %>
+    <h1><%= organization.name %></h1>
+    <p><%= organization.description %></p>
+    
+    <h2>Service Projects</h2>
+    <% if (projects.length > 0) { %>
+        <ul>
+            <% projects.forEach(project => { %>
+                <li><a href="/project/<%= project.id %>"><%= project.name %></a></li>
+            <% }) %>
+        </ul>
+    <% } else { %>
+        <p>No projects found for this organization.</p>
+    <% } %>
+<%- include('partials/footer', { year: year }) %>

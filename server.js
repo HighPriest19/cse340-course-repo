@@ -1,6 +1,6 @@
 import express from 'express'
 import dotenv from 'dotenv'
-import { getAllCategories } from './src/models/categories.js'
+import routes from './src/routes/index.js'
 
 dotenv.config()
 
@@ -16,34 +16,28 @@ app.use(express.static("public"))
 // Serve images from the images folder
 app.use("/images", express.static("images"))
 
+// Use routes
+app.use(routes)
+
 /* ***********************
- * Routes
+ * Error Handling
  *************************/
 
-// Home Page
-app.get("/", async (req, res) => {
-  res.render("index", { title: "Home", year: new Date().getFullYear() })
+// 404 Error Handler
+app.use((req, res) => {
+  res.status(404).render('404', { 
+    title: 'Page Not Found',
+    year: new Date().getFullYear()
+  })
 })
 
-// Organizations Page
-app.get("/organizations", async (req, res) => {
-  const organizations = [
-    { name: "Habitat for Humanity", description: "Building homes and communities", image: "/images/organization1.jpeg" },
-    { name: "Red Cross", description: "Humanitarian assistance and disaster relief", image: "/images/organization2.jpeg" },
-    { name: "Local Food Bank", description: "Fighting hunger in our community", image: "/images/organization3.jpeg" }
-  ]
-  res.render("organizations", { title: "Organizations", organizations: organizations, year: new Date().getFullYear() })
-})
-
-// Service Projects Page
-app.get("/projects", async (req, res) => {
-  res.render("projects", { title: "Projects", year: new Date().getFullYear() })
-})
-
-// Categories Page (REQUIRED for Assignment)
-app.get("/categories", async (req, res) => {
-  const categories = await getAllCategories()
-  res.render("categories", { title: "Categories", categories: categories, year: new Date().getFullYear() })
+// 500 Error Handler
+app.use((err, req, res, next) => {
+  console.error(err.stack)
+  res.status(500).render('500', { 
+    title: 'Server Error',
+    year: new Date().getFullYear()
+  })
 })
 
 app.listen(port, () => {

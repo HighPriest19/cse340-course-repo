@@ -1,6 +1,7 @@
-﻿<%- include('partials/header') %>
-    <h1>Projects</h1>
-    <p>Check out our available service project opportunities:</p>
+<%- include('partials/header') %>
+    <h1><%= category.name %></h1>
+    
+    <h2>Service Projects</h2>
     <% if (projects.length > 0) { %>
         <ul>
             <% projects.forEach(project => { %>
@@ -8,6 +9,6 @@
             <% }) %>
         </ul>
     <% } else { %>
-        <p>No projects found.</p>
+        <p>No projects found for this category.</p>
     <% } %>
 <%- include('partials/footer', { year: year }) %>

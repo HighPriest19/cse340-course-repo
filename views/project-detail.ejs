@@ -1,0 +1,17 @@
+<%- include('partials/header') %>
+    <h1><%= project.name %></h1>
+    <p><%= project.description %></p>
+    
+    <h3>Organization: <a href="/organization/<%= project.organization_id %>"><%= project.organization_name %></a></h3>
+    
+    <h3>Categories</h3>
+    <% if (categories.length > 0) { %>
+        <ul>
+            <% categories.forEach(category => { %>
+                <li><a href="/category/<%= category.id %>"><%= category.name %></a></li>
+            <% }) %>
+        </ul>
+    <% } else { %>
+        <p>No categories assigned to this project.</p>
+    <% } %>
+<%- include('partials/footer', { year: year }) %>
