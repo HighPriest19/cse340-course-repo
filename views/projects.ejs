@@ -1,10 +1,13 @@
-﻿<%- include('partials/header', { title: title }) %>
+<%- include('partials/header') %>
     <h1>Projects</h1>
     <p>Check out our available service project opportunities:</p>
-    <ul>
-        <li>Park clean-up</li>
-        <li>Tutoring program</li>
-        <li>Neighborhood garden</li>
-        <li>Health fair</li>
-    </ul>
+    <% if (projects.length > 0) { %>
+        <ul>
+            <% projects.forEach(project => { %>
+                <li><a href="/project/<%= project.id %>"><%= project.name %></a> - <%= project.organization_name %></li>
+            <% }) %>
+        </ul>
+    <% } else { %>
+        <p>No projects found.</p>
+    <% } %>
 <%- include('partials/footer', { year: year }) %>
