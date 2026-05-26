@@ -14,6 +14,10 @@ app.use(express.static("public"))
 // Serve images from the images folder
 app.use("/images", express.static("images"))
 
+// Parse form submissions
+app.use(express.urlencoded({ extended: true }))
+app.use(express.json())
+
 // Use routes
 app.use(routes)
 

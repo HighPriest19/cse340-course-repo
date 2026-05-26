@@ -1,4 +1,4 @@
-import * as projectsModel from '../models/projects.js'
+import * as projectsModel from '../models/project.js'
 import * as organizationsModel from '../models/organizations.js'
 
 // Validation function

@@ -42,7 +42,7 @@ async function organizationDetail(req, res, next) {
     
     const projects = await organizationsModel.getProjectsByOrganizationId(id)
     
-    res.render('organization-detail', { 
+    res.render('organization-details', { 
       title: organization.name, 
       organization: organization,
       projects: projects,
