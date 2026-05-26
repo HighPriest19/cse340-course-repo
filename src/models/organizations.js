@@ -36,4 +36,38 @@ async function getProjectsByOrganizationId(orgId) {
   }
 }
 
-export { getAllOrganizations, getOrganizationById, getProjectsByOrganizationId }
+// Add new organization
+async function addOrganization(name, description) {
+  try {
+    const result = await pool.query(
+      'INSERT INTO organizations (name, description) VALUES ($1, $2) RETURNING *',
+      [name, description]
+    )
+    return result.rows[0]
+  } catch (error) {
+    console.error('Error adding organization:', error)
+    return null
+  }
+}
+
+// Update organization
+async function updateOrganization(id, name, description) {
+  try {
+    const result = await pool.query(
+      'UPDATE organizations SET name = $1, description = $2 WHERE id = $3 RETURNING *',
+      [name, description, id]
+    )
+    return result.rows[0]
+  } catch (error) {
+    console.error('Error updating organization:', error)
+    return null
+  }
+}
+
+export { 
+  getAllOrganizations, 
+  getOrganizationById, 
+  getProjectsByOrganizationId,
+  addOrganization,
+  updateOrganization
+}

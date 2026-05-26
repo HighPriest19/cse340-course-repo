@@ -17,12 +17,20 @@ router.get('/', (req, res) => {
  *************************/
 router.get('/organizations', organizationsController.listOrganizations)
 router.get('/organization/:id', organizationsController.organizationDetail)
+router.get('/new-organization', organizationsController.newOrganizationView)
+router.post('/new-organization', organizationsController.createOrganization)
+router.get('/edit-organization/:id', organizationsController.editOrganizationView)
+router.post('/edit-organization/:id', organizationsController.updateOrganization)
 
 /* ***********************
  * Projects Routes
  *************************/
 router.get('/projects', projectsController.listProjects)
 router.get('/project/:id', projectsController.projectDetail)
+router.get('/new-project', projectsController.newProjectView)
+router.post('/new-project', projectsController.createProject)
+router.get('/edit-project/:id', projectsController.editProjectView)
+router.post('/edit-project/:id', projectsController.updateProject)
 
 /* ***********************
  * Categories Routes

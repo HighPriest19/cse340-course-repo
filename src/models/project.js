@@ -49,4 +49,38 @@ async function getCategoriesByProjectId(projectId) {
   }
 }
 
-export { getAllProjects, getProjectById, getCategoriesByProjectId }
+// Add new project
+async function addProject(name, description, organizationId) {
+  try {
+    const result = await pool.query(
+      'INSERT INTO projects (name, description, organization_id) VALUES ($1, $2, $3) RETURNING *',
+      [name, description, organizationId]
+    )
+    return result.rows[0]
+  } catch (error) {
+    console.error('Error adding project:', error)
+    return null
+  }
+}
+
+// Update project
+async function updateProject(id, name, description, organizationId) {
+  try {
+    const result = await pool.query(
+      'UPDATE projects SET name = $1, description = $2, organization_id = $3 WHERE id = $4 RETURNING *',
+      [name, description, organizationId, id]
+    )
+    return result.rows[0]
+  } catch (error) {
+    console.error('Error updating project:', error)
+    return null
+  }
+}
+
+export { 
+  getAllProjects, 
+  getProjectById, 
+  getCategoriesByProjectId,
+  addProject,
+  updateProject
+}
