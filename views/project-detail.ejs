@@ -14,4 +14,8 @@
     <% } else { %>
         <p>No categories assigned to this project.</p>
     <% } %>
+    
+    <div class="project-actions">
+        <a href="/edit-project/<%= project.id %>" class="btn-edit">Edit Project</a>
+    </div>
 <%- include('partials/footer', { year: year }) %>

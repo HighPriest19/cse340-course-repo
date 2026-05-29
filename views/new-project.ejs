@@ -1,0 +1,43 @@
+<%- include('partials/header') %>
+    <h1>Create New Service Project</h1>
+    
+    <% if (locals.errors && errors.length > 0) { %>
+        <div class="errors">
+            <h3>Please fix the following errors:</h3>
+            <ul>
+                <% errors.forEach(error => { %>
+                    <li><%= error %></li>
+                <% }) %>
+            </ul>
+        </div>
+    <% } %>
+    
+    <form method="POST" action="/new-project" class="project-form">
+        <div class="form-group">
+            <label for="name">Project Name:</label>
+            <input type="text" id="name" name="name" value="<%= locals.name || '' %>" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" rows="5" required><%= locals.description || '' %></textarea>
+        </div>
+        
+        <div class="form-group">
+            <label for="organization_id">Select Organization:</label>
+            <select id="organization_id" name="organization_id" required>
+                <option value="">-- Choose Organization --</option>
+                <% organizations.forEach(org => { %>
+                    <option value="<%= org.id %>" <%= locals.organization_id == org.id ? 'selected' : '' %>>
+                        <%= org.name %>
+                    </option>
+                <% }) %>
+            </select>
+        </div>
+        
+        <div class="form-actions">
+            <button type="submit" class="btn-submit">Create Project</button>
+            <a href="/projects" class="btn-cancel">Cancel</a>
+        </div>
+    </form>
+<%- include('partials/footer', { year: year }) %>
