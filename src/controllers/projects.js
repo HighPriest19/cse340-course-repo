@@ -65,7 +65,10 @@ async function newProjectView(req, res, next) {
       title: 'New Project',
       organizations: organizations,
       year: new Date().getFullYear(),
-      errors: []
+      errors: [],
+      name: '',
+      description: '',
+      organization_id: ''
     })
   } catch (error) {
     next(error)

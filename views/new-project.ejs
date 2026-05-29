@@ -1,7 +1,7 @@
 <%- include('partials/header') %>
     <h1>Create New Service Project</h1>
     
-    <% if (locals.errors && errors.length > 0) { %>
+    <% if (errors && errors.length > 0) { %>
         <div class="errors">
             <h3>Please fix the following errors:</h3>
             <ul>
@@ -15,12 +15,12 @@
     <form method="POST" action="/new-project" class="project-form">
         <div class="form-group">
             <label for="name">Project Name:</label>
-            <input type="text" id="name" name="name" value="<%= locals.name || '' %>" required>
+            <input type="text" id="name" name="name" value="<%= name || '' %>" required>
         </div>
         
         <div class="form-group">
             <label for="description">Description:</label>
-            <textarea id="description" name="description" rows="5" required><%= locals.description || '' %></textarea>
+            <textarea id="description" name="description" rows="5" required><%= description || '' %></textarea>
         </div>
         
         <div class="form-group">
@@ -28,7 +28,7 @@
             <select id="organization_id" name="organization_id" required>
                 <option value="">-- Choose Organization --</option>
                 <% organizations.forEach(org => { %>
-                    <option value="<%= org.id %>" <%= locals.organization_id == org.id ? 'selected' : '' %>>
+                    <option value="<%= org.id %>" <%= organization_id == org.id ? 'selected' : '' %>>
                         <%= org.name %>
                     </option>
                 <% }) %>
