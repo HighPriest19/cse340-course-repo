@@ -2,8 +2,9 @@
     <h1>Organizations</h1>
     <p>Here are some local organizations supporting service projects:</p>
     <div class="organizations-container">
-        <% organizations.forEach(org => { %>
+        <% organizations.forEach((org, index) => { %>
             <div class="organization-card">
+                <img src="/images/organization<%= (index % 3) + 1 %>.jpeg" alt="<%= org.name %>">
                 <h2><a href="/organization/<%= org.id %>"><%= org.name %></a></h2>
                 <p><%= org.description %></p>
             </div>
