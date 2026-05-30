@@ -3,7 +3,7 @@ import 'dotenv/config'
 import session from 'express-session'
 import pgSession from 'connect-pg-simple'
 import routes from './src/routes/index.js'
-import { pool } from './src/database/index.js'
+import pool from './src/database/index.js'
 import { checkAuth } from './src/middleware/auth.js'
 
 const app = express()

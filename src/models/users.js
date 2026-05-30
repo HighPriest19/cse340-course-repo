@@ -1,4 +1,4 @@
-import { pool } from '../database/index.js'
+import pool from '../database/index.js'
 
 export async function getAllUsers() {
   try {
