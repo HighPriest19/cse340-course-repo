@@ -1,9 +1,31 @@
 import express from 'express'
 import 'dotenv/config'
+import session from 'express-session'
+import pgSession from 'connect-pg-simple'
 import routes from './src/routes/index.js'
+import { pool } from './src/database/index.js'
+import { checkAuth } from './src/middleware/auth.js'
 
 const app = express()
 const port = process.env.PORT || 3000
+
+// Session middleware setup
+const PostgresqlStore = pgSession(session)
+
+app.use(
+  session({
+    store: new PostgresqlStore({
+      pool: pool,
+      tableName: 'session'
+    }),
+    secret: process.env.SESSION_SECRET || 'your-secret-key',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 24 // 24 hours
+    }
+  })
+)
 
 // Set view engine to EJS
 app.set("view engine", "ejs")
@@ -17,6 +39,9 @@ app.use("/images", express.static("images"))
 // Parse form submissions
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
+
+// Check authentication status for all requests
+app.use(checkAuth)
 
 // Use routes
 app.use(routes)

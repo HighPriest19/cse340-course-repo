@@ -1,8 +1,30 @@
 -- Drop existing tables if they exist
+DROP TABLE IF EXISTS "session" CASCADE;
 DROP TABLE IF EXISTS project_categories CASCADE;
 DROP TABLE IF EXISTS projects CASCADE;
 DROP TABLE IF EXISTS organizations CASCADE;
 DROP TABLE IF EXISTS categories CASCADE;
+DROP TABLE IF EXISTS users CASCADE;
+
+-- Create users table
+CREATE TABLE users (
+  id SERIAL PRIMARY KEY,
+  email VARCHAR(100) NOT NULL UNIQUE,
+  password VARCHAR(255) NOT NULL,
+  name VARCHAR(100) NOT NULL,
+  role VARCHAR(20) DEFAULT 'user',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Create sessions table for express-session with connect-pg-simple
+CREATE TABLE "session" (
+  "sid" varchar NOT NULL COLLATE "default",
+  "sess" json NOT NULL,
+  "expire" timestamp(6) NOT NULL,
+  PRIMARY KEY ("sid")
+);
+
+CREATE INDEX "IDX_session_expire" on "session" ("expire");
 
 -- Create organizations table
 CREATE TABLE organizations (
@@ -66,3 +88,9 @@ INSERT INTO project_categories (project_id, category_id) VALUES
   (5, 3),  -- Food Distribution: Community Service
   (6, 1),  -- Community Garden: Environmental
   (6, 3);  -- Community Garden: Community Service
+
+-- Note: Admin and test users will be created via seed script or application
+-- The following is a placeholder - actual hashed passwords will be inserted by seed-users.js
+-- INSERT INTO users (email, password, name, role) VALUES
+--   ('admin@example.com', '$2b$10$...[hashed password]...', 'Admin User', 'admin'),
+--   ('user@example.com', '$2b$10$...[hashed password]...', 'Regular User', 'user');

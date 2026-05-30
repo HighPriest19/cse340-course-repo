@@ -2,6 +2,9 @@ import express from 'express'
 import * as organizationsController from '../controllers/organizations.js'
 import * as projectsController from '../controllers/projects.js'
 import * as categoriesController from '../controllers/categories.js'
+import * as authController from '../controllers/auth.js'
+import * as usersController from '../controllers/users.js'
+import { requireLogin, requireRole } from '../middleware/auth.js'
 
 const router = express.Router()
 
@@ -11,6 +14,25 @@ const router = express.Router()
 router.get('/', (req, res) => {
   res.render('index', { title: 'Home', year: new Date().getFullYear() })
 })
+
+/* ***********************
+ * Authentication Routes
+ *************************/
+router.get('/register', authController.registerView)
+router.post('/register', authController.register)
+router.get('/login', authController.loginView)
+router.post('/login', authController.login)
+router.get('/logout', authController.logout)
+
+/* ***********************
+ * Dashboard Route
+ *************************/
+router.get('/dashboard', requireLogin, usersController.dashboard)
+
+/* ***********************
+ * Users Routes (Admin Only)
+ *************************/
+router.get('/users', requireLogin, requireRole('admin'), usersController.usersList)
 
 /* ***********************
  * Organizations Routes

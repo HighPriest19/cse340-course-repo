@@ -21,10 +21,13 @@
   },
   "homepage": "https://github.com/HighPriest19/cse340-course-repo#readme",
   "dependencies": {
+    "bcryptjs": "^3.0.3",
     "body-parser": "^2.2.2",
+    "connect-pg-simple": "^10.0.0",
     "dotenv": "^17.4.2",
     "ejs": "^5.0.2",
     "express": "^5.2.1",
+    "express-session": "^1.19.0",
     "nodemon": "^3.1.14",
     "pg": "^8.20.0"
   }
