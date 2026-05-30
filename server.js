@@ -4,10 +4,18 @@ import session from 'express-session'
 import pgSession from 'connect-pg-simple'
 import routes from './src/routes/index.js'
 import pool from './src/database/index.js'
+import { ensureDatabase } from './src/database/init.js'
 import { checkAuth } from './src/middleware/auth.js'
 
 const app = express()
 const port = process.env.PORT || 3000
+
+try {
+  await ensureDatabase()
+} catch (error) {
+  console.error('Database initialization failed:', error)
+  process.exit(1)
+}
 
 // Session middleware setup
 const PostgresqlStore = pgSession(session)
