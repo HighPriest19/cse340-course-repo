@@ -1,4 +1,5 @@
 import * as usersModel from '../models/users.js'
+import * as projectsModel from '../models/project.js'
 
 // List all users (admin only)
 export async function usersList(req, res) {
@@ -22,10 +23,13 @@ export async function usersList(req, res) {
 // Dashboard view
 export async function dashboard(req, res) {
   try {
+    const volunteerProjects = await projectsModel.getVolunteerProjectsByUserId(req.session.userId)
     res.render('dashboard', {
       title: 'Dashboard',
       year: new Date().getFullYear(),
-      user: res.locals.user
+      user: res.locals.user,
+      message: req.query.message || '',
+      volunteerProjects: volunteerProjects
     })
   } catch (error) {
     console.error('Error loading dashboard:', error)

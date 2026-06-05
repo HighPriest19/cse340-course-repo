@@ -49,6 +49,64 @@ async function getCategoriesByProjectId(projectId) {
   }
 }
 
+async function addProjectVolunteer(userId, projectId) {
+  try {
+    await pool.query(
+      `INSERT INTO project_volunteers (user_id, project_id)
+       VALUES ($1, $2)
+       ON CONFLICT (user_id, project_id) DO NOTHING`,
+      [userId, projectId]
+    )
+    return true
+  } catch (error) {
+    console.error('Error adding project volunteer:', error)
+    return false
+  }
+}
+
+async function removeProjectVolunteer(userId, projectId) {
+  try {
+    const result = await pool.query(
+      'DELETE FROM project_volunteers WHERE user_id = $1 AND project_id = $2',
+      [userId, projectId]
+    )
+    return result.rowCount > 0
+  } catch (error) {
+    console.error('Error removing project volunteer:', error)
+    return false
+  }
+}
+
+async function userIsVolunteer(userId, projectId) {
+  try {
+    const result = await pool.query(
+      'SELECT 1 FROM project_volunteers WHERE user_id = $1 AND project_id = $2',
+      [userId, projectId]
+    )
+    return result.rows.length > 0
+  } catch (error) {
+    console.error('Error checking volunteer status:', error)
+    return false
+  }
+}
+
+async function getVolunteerProjectsByUserId(userId) {
+  try {
+    const result = await pool.query(`
+      SELECT p.id, p.name, p.description, o.name AS organization_name, o.id AS organization_id
+      FROM projects p
+      JOIN organizations o ON p.organization_id = o.id
+      JOIN project_volunteers pv ON p.id = pv.project_id
+      WHERE pv.user_id = $1
+      ORDER BY p.name ASC
+    `, [userId])
+    return result.rows
+  } catch (error) {
+    console.error('Error fetching volunteer projects for user:', error)
+    return []
+  }
+}
+
 // Add new project
 async function addProject(name, description, organizationId) {
   try {
@@ -81,6 +139,10 @@ export {
   getAllProjects, 
   getProjectById, 
   getCategoriesByProjectId,
+  addProjectVolunteer,
+  removeProjectVolunteer,
+  userIsVolunteer,
+  getVolunteerProjectsByUserId,
   addProject,
   updateProject
 }

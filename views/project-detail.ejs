@@ -14,6 +14,17 @@
     <% } else { %>
         <p>No categories assigned to this project.</p>
     <% } %>
+
+    <% if (isAuthenticated) { %>
+        <div class="volunteer-actions">
+            <% if (isVolunteer) { %>
+                <p class="volunteer-status">You are volunteering for this project.</p>
+                <a href="/project/<%= project.id %>/unvolunteer" class="btn-cancel">Remove Volunteer</a>
+            <% } else { %>
+                <a href="/project/<%= project.id %>/volunteer" class="btn-submit">Volunteer for this project</a>
+            <% } %>
+        </div>
+    <% } %>
     
     <div class="project-actions">
         <a href="/edit-project/<%= project.id %>" class="btn-edit">Edit Project</a>

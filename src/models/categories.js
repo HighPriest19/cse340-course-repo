@@ -40,4 +40,30 @@ async function getProjectsByCategoryId(categoryId) {
   }
 }
 
-export { getAllCategories, getCategoryById, getProjectsByCategoryId }
+async function addCategory(name) {
+  try {
+    const result = await pool.query(
+      'INSERT INTO categories (name) VALUES ($1) RETURNING id',
+      [name]
+    )
+    return result.rows[0]
+  } catch (error) {
+    console.error('Error adding category:', error)
+    return null
+  }
+}
+
+async function updateCategory(id, name) {
+  try {
+    const result = await pool.query(
+      'UPDATE categories SET name = $1 WHERE id = $2',
+      [name, id]
+    )
+    return result.rowCount > 0
+  } catch (error) {
+    console.error('Error updating category:', error)
+    return false
+  }
+}
+
+export { getAllCategories, getCategoryById, getProjectsByCategoryId, addCategory, updateCategory }

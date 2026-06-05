@@ -1,0 +1,28 @@
+<%- include('partials/header') %>
+    <h1>Registered Users</h1>
+
+    <% if (users.length === 0) { %>
+        <p>No users are currently registered.</p>
+    <% } else { %>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% users.forEach(user => { %>
+                    <tr>
+                        <td><%= user.name %></td>
+                        <td><%= user.email %></td>
+                        <td><%= user.role %></td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    <% } %>
+
+    <p><a class="btn-cancel" href="/dashboard">Back to Dashboard</a></p>
+<%- include('partials/footer', { year: year }) %>

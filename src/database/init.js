@@ -43,6 +43,12 @@ async function ensureDatabase() {
       category_id INT NOT NULL REFERENCES categories(id),
       PRIMARY KEY (project_id, category_id)
     );
+
+    CREATE TABLE IF NOT EXISTS project_volunteers (
+      user_id INT NOT NULL REFERENCES users(id),
+      project_id INT NOT NULL REFERENCES projects(id),
+      PRIMARY KEY (user_id, project_id)
+    );
   `)
 
   await pool.query(`

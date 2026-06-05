@@ -49,6 +49,8 @@ router.post('/edit-organization/:id', organizationsController.updateOrganization
  *************************/
 router.get('/projects', projectsController.listProjects)
 router.get('/project/:id', projectsController.projectDetail)
+router.get('/project/:id/volunteer', requireLogin, projectsController.volunteerForProject)
+router.get('/project/:id/unvolunteer', requireLogin, projectsController.removeVolunteerFromProject)
 router.get('/new-project', projectsController.newProjectView)
 router.post('/new-project', projectsController.createProject)
 router.get('/edit-project/:id', projectsController.editProjectView)
@@ -59,5 +61,9 @@ router.post('/edit-project/:id', projectsController.updateProject)
  *************************/
 router.get('/categories', categoriesController.listCategories)
 router.get('/category/:id', categoriesController.categoryDetail)
+router.get('/new-category', categoriesController.newCategoryView)
+router.post('/new-category', categoriesController.createCategory)
+router.get('/edit-category/:id', categoriesController.editCategoryView)
+router.post('/edit-category/:id', categoriesController.updateCategory)
 
 export default router

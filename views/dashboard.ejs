@@ -1,0 +1,38 @@
+<%- include('partials/header') %>
+    <h1>Dashboard</h1>
+
+    <% if (message) { %>
+        <div class="success-message">
+            <%= message %>
+        </div>
+    <% } %>
+
+    <p>Welcome back, <strong><%= user.name %></strong>!</p>
+    <p>Your role: <strong><%= user.role %></strong></p>
+
+    <section class="dashboard-actions">
+        <p><a class="btn-submit" href="/organizations">View Organizations</a></p>
+        <p><a class="btn-submit" href="/projects">View Projects</a></p>
+        <p><a class="btn-submit" href="/categories">View Categories</a></p>
+        <% if (user.role === 'admin') { %>
+            <p><a class="btn-submit" href="/users">Manage Users</a></p>
+        <% } %>
+    </section>
+
+    <section class="volunteer-dashboard">
+        <h2>Your Volunteer Projects</h2>
+        <% if (volunteerProjects && volunteerProjects.length > 0) { %>
+            <ul>
+                <% volunteerProjects.forEach(project => { %>
+                    <li>
+                        <a href="/project/<%= project.id %>"><%= project.name %></a>
+                        <span class="project-meta">(<%= project.organization_name %>)</span>
+                        <a href="/project/<%= project.id %>/unvolunteer" class="btn-cancel btn-small">Remove</a>
+                    </li>
+                <% }) %>
+            </ul>
+        <% } else { %>
+            <p>You have not signed up to volunteer for any projects yet.</p>
+        <% } %>
+    </section>
+<%- include('partials/footer', { year: year }) %>

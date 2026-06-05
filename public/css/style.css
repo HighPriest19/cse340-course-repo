@@ -284,12 +284,105 @@ img {
     transform: translateY(-2px);
 }
 
+.nav-auth {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.nav-welcome {
+    color: var(--muted);
+    font-weight: 600;
+    padding: 0.6rem 0.8rem;
+}
+
+.btn-login,
+.btn-register,
+.btn-logout {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.65rem 1rem;
+    font-weight: 600;
+    border-radius: 999px;
+    text-decoration: none;
+    transition: all 220ms ease;
+    border: 2px solid transparent;
+}
+
+.btn-login,
+.btn-register {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text);
+    border-color: var(--border);
+}
+
+.btn-login:hover,
+.btn-register:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+.btn-logout {
+    background: #dc2626;
+    color: #ffffff;
+    border-color: #dc2626;
+}
+
+.btn-logout:hover {
+    background: #f87171;
+    border-color: #f87171;
+    transform: translateY(-2px);
+}
+
 .project-actions {
     display: flex;
     gap: 1rem;
     margin-top: 2rem;
     padding-top: 1.5rem;
     border-top: 1px solid var(--border);
+}
+
+.volunteer-actions,
+.volunteer-dashboard {
+    margin-top: 2rem;
+}
+
+.volunteer-status {
+    margin-bottom: 1rem;
+    font-weight: 600;
+    color: var(--accent);
+}
+
+.btn-small {
+    display: inline-flex;
+    padding: 0.55rem 1rem;
+    font-size: 0.85rem;
+    border-radius: 8px;
+}
+
+.volunteer-dashboard ul {
+    list-style: none;
+    margin: 1rem 0 0;
+    padding: 0;
+    display: grid;
+    gap: 0.85rem;
+}
+
+.volunteer-dashboard li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem 1.25rem;
+}
+
+.project-meta {
+    color: var(--muted);
+    margin-left: 0.75rem;
 }
 
 .errors {

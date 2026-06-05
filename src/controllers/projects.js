@@ -45,12 +45,16 @@ async function projectDetail(req, res, next) {
     }
     
     const categories = await projectsModel.getCategoriesByProjectId(id)
+    const isVolunteer = req.session && req.session.userId
+      ? await projectsModel.userIsVolunteer(req.session.userId, id)
+      : false
     
     res.render('project-detail', { 
       title: project.name, 
       project: project,
       categories: categories,
-      year: new Date().getFullYear()
+      year: new Date().getFullYear(),
+      isVolunteer: isVolunteer
     })
   } catch (error) {
     next(error)
@@ -174,11 +178,35 @@ async function updateProject(req, res, next) {
   }
 }
 
+async function volunteerForProject(req, res, next) {
+  try {
+    const { id } = req.params
+    const userId = req.session.userId
+    await projectsModel.addProjectVolunteer(userId, id)
+    res.redirect(`/project/${id}`)
+  } catch (error) {
+    next(error)
+  }
+}
+
+async function removeVolunteerFromProject(req, res, next) {
+  try {
+    const { id } = req.params
+    const userId = req.session.userId
+    await projectsModel.removeProjectVolunteer(userId, id)
+    res.redirect(`/project/${id}`)
+  } catch (error) {
+    next(error)
+  }
+}
+
 export { 
   listProjects, 
   projectDetail,
   newProjectView,
   createProject,
   editProjectView,
-  updateProject
+  updateProject,
+  volunteerForProject,
+  removeVolunteerFromProject
 }

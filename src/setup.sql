@@ -54,6 +54,13 @@ CREATE TABLE project_categories (
   PRIMARY KEY (project_id, category_id)
 );
 
+-- Create volunteer signups table to track user project volunteering
+CREATE TABLE project_volunteers (
+  user_id INT NOT NULL REFERENCES users(id),
+  project_id INT NOT NULL REFERENCES projects(id),
+  PRIMARY KEY (user_id, project_id)
+);
+
 -- Insert sample organizations
 INSERT INTO organizations (name, description) VALUES
   ('Habitat for Humanity', 'Building homes and communities'),
@@ -89,8 +96,7 @@ INSERT INTO project_categories (project_id, category_id) VALUES
   (6, 1),  -- Community Garden: Environmental
   (6, 3);  -- Community Garden: Community Service
 
--- Note: Admin and test users will be created via seed script or application
--- The following is a placeholder - actual hashed passwords will be inserted by seed-users.js
--- INSERT INTO users (email, password, name, role) VALUES
---   ('admin@example.com', '$2b$10$...[hashed password]...', 'Admin User', 'admin'),
---   ('user@example.com', '$2b$10$...[hashed password]...', 'Regular User', 'user');
+-- Seed admin and regular users for testing
+INSERT INTO users (email, password, name, role) VALUES
+  ('admin@example.com', '$2b$10$2w3Mfyd2LeKQ3kWTAxJ2Z.ltlmBAEfzuqQFGvhFKl3svmjp3GeDPO', 'Admin User', 'admin'),
+  ('user@example.com', '$2b$10$2w3Mfyd2LeKQ3kWTAxJ2Z.ltlmBAEfzuqQFGvhFKl3svmjp3GeDPO', 'Regular User', 'user');

@@ -17,11 +17,7 @@ export function requireRole(role) {
     if (req.session && req.session.userId && req.session.userRole === role) {
       next()
     } else {
-      res.status(403).render('403', {
-        title: 'Access Denied',
-        year: new Date().getFullYear(),
-        message: 'You do not have permission to access this page.'
-      })
+      res.redirect('/dashboard?message=Access denied: admin-only page')
     }
   }
 }

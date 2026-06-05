@@ -1,5 +1,6 @@
 <%- include('partials/header') %>
     <h1><%= category.name %></h1>
+    <p><a class="btn-submit" href="/edit-category/<%= category.id %>">Edit Category</a></p>
     
     <h2>Service Projects</h2>
     <% if (projects.length > 0) { %>
