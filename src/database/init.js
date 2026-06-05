@@ -107,6 +107,13 @@ async function ensureDatabase() {
     JOIN categories c ON c.name = links.category_name
     ON CONFLICT DO NOTHING;
   `)
+
+  await pool.query(`
+    INSERT INTO users (email, password, name, role) VALUES
+      ('admin@example.com', '$2b$10$2w3Mfyd2LeKQ3kWTAxJ2Z.ltlmBAEfzuqQFGvhFKl3svmjp3GeDPO', 'Admin User', 'admin'),
+      ('user@example.com', '$2b$10$2w3Mfyd2LeKQ3kWTAxJ2Z.ltlmBAEfzuqQFGvhFKl3svmjp3GeDPO', 'Regular User', 'user')
+    ON CONFLICT (email) DO NOTHING;
+  `)
 }
 
 export { ensureDatabase }
