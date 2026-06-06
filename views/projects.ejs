@@ -1,10 +1,14 @@
 <%- include('partials/header') %>
     <h1>Projects</h1>
     <p>Check out our available service project opportunities:</p>
+    <p><a class="btn-submit" href="/new-project">Add New Project</a></p>
     <% if (projects.length > 0) { %>
         <ul>
             <% projects.forEach(project => { %>
-                <li><a href="/project/<%= project.id %>"><%= project.name %></a> - <%= project.organization_name %></li>
+                <li>
+                    <a href="/project/<%= project.id %>"><%= project.name %></a> - <%= project.organization_name %>
+                    <a class="small-link" href="/edit-project/<%= project.id %>">Edit</a>
+                </li>
             <% }) %>
         </ul>
     <% } else { %>

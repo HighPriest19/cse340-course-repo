@@ -1,12 +1,14 @@
 <%- include('partials/header') %>
     <h1>Organizations</h1>
     <p>Here are some local organizations supporting service projects:</p>
+    <p><a class="btn-submit" href="/new-organization">Add New Organization</a></p>
     <div class="organizations-container">
         <% organizations.forEach((org, index) => { %>
             <div class="organization-card">
                 <img src="/images/organization<%= (index % 3) + 1 %>.jpeg" alt="<%= org.name %>">
                 <h2><a href="/organization/<%= org.id %>"><%= org.name %></a></h2>
                 <p><%= org.description %></p>
+                <p><a class="small-link" href="/edit-organization/<%= org.id %>">Edit</a></p>
             </div>
         <% }) %>
     </div>

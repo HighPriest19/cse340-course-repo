@@ -1,7 +1,9 @@
 <%- include('partials/header') %>
     <h1><%= organization.name %></h1>
     <p><%= organization.description %></p>
-    
+    <div class="organization-actions">
+        <a class="btn-edit" href="/edit-organization/<%= organization.id %>">Edit Organization</a>
+    </div>
     <h2>Service Projects</h2>
     <% if (projects.length > 0) { %>
         <ul>
